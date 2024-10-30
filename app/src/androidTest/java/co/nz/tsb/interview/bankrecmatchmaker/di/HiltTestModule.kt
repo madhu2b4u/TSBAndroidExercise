@@ -1,7 +1,10 @@
 package co.nz.tsb.interview.bankrecmatchmaker.di
 
-import co.nz.tsb.interview.bankrecmatchmaker.data.repository.MatchRepository
+import co.nz.tsb.interview.bankrecmatchmaker.data.repository.FakeTransactionUseCase
+import co.nz.tsb.interview.bankrecmatchmaker.transactions.data.repository.TransactionRepository
 import co.nz.tsb.interview.bankrecmatchmaker.data.repository.MockMatchRepositoryForSuccessTest
+import co.nz.tsb.interview.bankrecmatchmaker.transactions.di.FindMatchModule
+import co.nz.tsb.interview.bankrecmatchmaker.transactions.domain.TransactionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -16,5 +19,11 @@ import javax.inject.Singleton
 object HiltTestModule {
   @Singleton
   @Provides
-  fun provideMatchRepository(): MatchRepository = MockMatchRepositoryForSuccessTest()
+  fun provideMatchRepository(): TransactionRepository = MockMatchRepositoryForSuccessTest()
+
+  @Singleton
+  @Provides
+  fun provideTestTransactionUseCase(): TransactionUseCase {
+    return FakeTransactionUseCase()
+  }
 }

@@ -13,12 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TSBAndroidExercise"
         tools:targetApi="31">
-
-
         <activity
-            android:name="co.nz.tsb.interview.bankrecmatchmaker.ui.activity.FindMatchActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.TSBAndroidExercise">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
