@@ -1,5 +1,6 @@
 package co.nz.tsb.interview.bankrecmatchmaker.transactions.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,7 +49,10 @@ fun TransactionScreen() {
         LazyColumn {
             items(matchItems.size) { index ->
                 val item = matchItems[index]
-                TransactionItem(item = item, onClick = { viewModel.onItemSelected(item) })
+                TransactionItem(
+                    item = item,
+                    canToggle = true,
+                    onClick = { viewModel.onItemSelected(item) })
             }
         }
 
@@ -65,22 +69,14 @@ fun TransactionScreen() {
         }
 
         errorMessage?.let {
-            Snackbar(
-                modifier = Modifier.padding(8.dp),
-                action = {
-                    Button(onClick = { viewModel.clearErrorMessage() }) {
-                        Text(stringResource(R.string.dismiss))
-                    }
-                }
-            ) {
-                Text(it)
-            }
+            Toast.makeText(LocalContext.current, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearErrorMessage()
         }
     }
 }
 
 @Composable
-fun TransactionItem(item: Transaction, onClick: () -> Unit) {
+fun TransactionItem(item: Transaction, onClick: () -> Unit, canToggle: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +86,8 @@ fun TransactionItem(item: Transaction, onClick: () -> Unit) {
     ) {
         Checkbox(
             checked = item.isChecked,
-            onCheckedChange = { onClick() }
+            onCheckedChange = { if (canToggle) onClick() },
+            enabled = canToggle
         )
         Column(
             modifier = Modifier

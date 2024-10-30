@@ -47,6 +47,21 @@ class TransactionViewModel @Inject constructor(
     }
 
     fun onItemSelected(matchItem: Transaction) {
+        val newRemainingTotal = if (matchItem.isChecked) {
+            _remainingTotal.value + matchItem.total
+        } else {
+            _remainingTotal.value - matchItem.total
+        }
+
+        if (newRemainingTotal < 0) {
+            _errorMessage.value = "Cant select this item"
+            return
+        }
+
+        if (newRemainingTotal > transactionTotal) {
+            _errorMessage.value = "Cannot uncheck item. Total would exceed the allowable limit."
+            return
+        }
         _matchItems.update { currentItems ->
             matchItemsUseCase.matchSelectedItem(currentItems, matchItem)
         }
